@@ -1,31 +1,36 @@
-void setup()
-{
-  pinMode(2,OUTPUT); 
-  pinMode(3,OUTPUT); 
-  pinMode(4,OUTPUT); 
-  pinMode(5,OUTPUT); 
-  pinMode(6,OUTPUT); 
-  pinMode(7,OUTPUT); 
-  pinMode(9,OUTPUT);
+int segmentos[] = {2, 3, 4, 5, 6, 7, 8};
+
+byte numeros[6][7] = {
+  {0, 0, 0, 0, 0, 0, 1},  // 0
+  {1, 0, 0, 1, 1, 1, 1},  // 1
+  {0, 0, 1, 0, 0, 1, 0},  // 2
+  {0, 0, 0, 0, 1, 1, 0},  // 3
+  {1, 0, 0, 1, 1, 0, 0},  // 4
+  {0, 1, 0, 0, 1, 0, 0}   // 5
+};
+
+void setup() {
+  Serial.begin(9600);
+  for (int i = 0; i < 7; i++) {
+    pinMode(segmentos[i], OUTPUT);
+    digitalWrite(segmentos[i], HIGH);  
+  }
 }
-void loop()
-{
-  digitalWrite(2,HIGH); 
-  digitalWrite(3,HIGH); 
-  digitalWrite(4,HIGH); 
-  digitalWrite(5,HIGH); 
-  digitalWrite(6,HIGH); 
-  digitalWrite(7,HIGH); 
-  digitalWrite(9,HIGH);
-  delay(1000);
-  digitalWrite(2,LOW);
-  digitalWrite(3,LOW);
-  digitalWrite(4,LOW);
-  digitalWrite(5,LOW);
-  digitalWrite(6,LOW);
-  digitalWrite(7,LOW);
-  digitalWrite(9,LOW);
-  delay(2000);
+
+void loop() {
+  if (Serial.available() > 0) {
+    int numero = Serial.read() - '0';
+
+    if (numero >= 0 && numero <= 5) {
+      mostrarNumero(numero);
+    }
+  }
+}
+
+void mostrarNumero(int n) {
+  for (int i = 0; i < 7; i++) {
+    digitalWrite(segmentos[i], numeros[n][i]);
+  }
 }
 
 
